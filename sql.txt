@@ -1,0 +1,10 @@
+CREATE TABLE Users( 
+    username VARCHAR(50) primary key, 
+    password VARCHAR(255), 
+    firstname VARCHAR(50), 
+    lastname VARCHAR(50), 
+    salary FLOAT, 
+    age INTEGER, 
+    registerday DATE, 
+    signintime DATETIME 
+);
