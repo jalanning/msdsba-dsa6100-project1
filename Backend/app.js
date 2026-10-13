@@ -32,8 +32,15 @@ app.post('/insert', (request, response) => {
    .catch(err => console.log(err));
 });
 
-
-
+app.post('/register/user', (request, response) => {
+    console.log("app: register a user.");
+    const {username, password, firstname, lastname, salary, age} = request.body;
+    const db = dbService.getDbServiceInstance();
+    const result = db.registerUser(username, password, firstname, lastname, salary, age);
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
 
 // read 
 app.get('/getAll', (request, response) => {
