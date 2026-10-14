@@ -3,14 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css">
+  <!-- <link rel="stylesheet" href="stylesheet.css"> -->
+  <script src="index.js"></script>
   <title>DB Project 1 new</title>
 </head>
 <body>
   <main>
-      <label>Name:</label>
-      <input type="text" id="name-input">
-      <button id="add-name-btn">Add Name</button>
+      <label>Username:</label>
+      <input type="text" id="username-input">
+
+     <br>
+      <label>Password:</label>
+      <input type="password" id="password-input">
+
+     <br>
+      <label>First Name:</label>
+      <input type="text" id="first-name-input">
+
+     <br>
+      <label>Last Name:</label>
+      <input type="text" id="last-name-input">
+
+     <br>
+      <label>Age:</label>
+      <input type="text" id="age-input">
+
+     <br>
+      <label>Salary:</label>
+      <input type="text" id="salary-input">
+      <br>
+      <button onclick="addUser()">Add User</button>
  
      <br><br><br>
      <div> 
@@ -30,12 +52,11 @@
          <tbody></tbody>
      </table>
 
-     <section hidden id="update-row">
+     <!-- <section hidden id="update-row">
          <label>Name:</label>
          <input type="text" id="update-name-input">
          <button id="update-row-btn" value="">Update</button>
-    </section>
+    </section> -->
 </main>
-<script src="index.js"></script>
 </body>
 </html>

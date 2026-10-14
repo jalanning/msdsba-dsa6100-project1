@@ -73,34 +73,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // when the addBtn is clicked
-const addBtn = document.querySelector('#add-name-btn');
-addBtn.onclick = function (){
-    const nameInput = document.querySelector('#name-input');
-    const name = nameInput.value;
-    nameInput.value = "";
 
-    fetch('http://localhost:5050/insert', {
+function addUser() {
+    const usernameInput = document.querySelector('#username-input');
+    const passwordInput = document.querySelector('#password-input');
+    const firstNameInput = document.querySelector('#first-name-input');
+    const lastNameInput = document.querySelector('#last-name-input');
+    const ageInput = document.querySelector('#age-input');
+    const salaryInput = document.querySelector('#salary-input');
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+    const firstname = firstNameInput.value;
+    const lastname = lastNameInput.value;
+    const age = ageInput.value;
+    const salary = salaryInput.value;
+
+    usernameInput.value = "";
+    passwordInput.value = "";
+    firstNameInput.value = "";
+    lastNameInput.value = "";
+    ageInput.value = "";
+    salaryInput.value = "";
+
+    fetch('http://localhost:5050/register/user', {
         headers: {
             'Content-type': 'application/json'
         },
         method: 'POST',
-        body: JSON.stringify({name: name})
+        body: JSON.stringify({
+            username,
+            password,
+            firstname,
+            lastname,
+            age,
+            salary
+        })
     })
     .then(response => response.json())
-    .then(data => insertRowIntoTable(data['data']));
+    .then(data => console.log(data));
 }
 
 // when the searchBtn is clicked
-const searchBtn =  document.querySelector('#search-btn');
-searchBtn.onclick = function (){
-    const searchInput = document.querySelector('#search-input');
-    const searchValue = searchInput.value;
-    searchInput.value = "";
+// const searchBtn =  document.querySelector('#search-btn');
+// searchBtn.onclick = function (){
+//     const searchInput = document.querySelector('#search-input');
+//     const searchValue = searchInput.value;
+//     searchInput.value = "";
 
-    fetch('http://localhost:5050/search/' + searchValue)
-    .then(response => response.json())
-    .then(data => loadHTMLTable(data['data']));
-}
+//     fetch('http://localhost:5050/search/' + searchValue)
+//     .then(response => response.json())
+//     .then(data => loadHTMLTable(data['data']));
+// }
 
 let rowToDelete; 
 
