@@ -84,6 +84,36 @@ app.get('/search/:name', requireAuth, (request, response) => { // we can debug b
     .catch(err => console.log(err));
 });
 
+app.get('/search/user/:username', requireAuth, (request, response) => {
+    const {username} = request.params;
+    console.log(username);
+    const db = dbService.getDbServiceInstance();
+    const result = db.getUserByUsername(username);
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+app.get('/search/user/between/salary/:min/:max', requireAuth, (request, response) => {
+    const {min, max} = request.params;
+    console.log(min, max);
+    const db = dbService.getDbServiceInstance();
+    const result = db.getUsersBetweenSalaries(min, max);
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+app.get('/search/user/between/age/:min/:max', requireAuth, (request, response) => {
+    const {min, max} = request.params;
+    console.log(min, max);
+    const db = dbService.getDbServiceInstance();
+    const result = db.getUsersBetweenAges(min, max);
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
 app.get('/getAllUsers', requireAuth, (request, response) => {
     const db = dbService.getDbServiceInstance();
     db.getAllUsers()

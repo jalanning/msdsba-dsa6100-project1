@@ -109,6 +109,75 @@ class DbService{
          }
    }
 
+   
+   async getUserByName(name){
+        try{
+             const response = await new Promise((resolve, reject) => 
+                  {
+                     const query = "SELECT username, firstname, lastname, registerday FROM users WHERE firstname = ? OR lastname = ?;";
+                     connection.query(query, [name, name], (err, results) => {
+                         if(err) reject(new Error(err.message));
+                         else resolve(results);
+                     });
+                  }
+            );
+            console.log(response);
+            return response;
+        } catch(error){
+         console.log(error);
+      }
+   }
+
+   async getUserByUsername(username){
+         try{
+             const response = await new Promise((resolve, reject) => 
+                  {
+                     const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ?;";
+                     connection.query(query, [username], (err, results) => {
+                         if(err) reject(new Error(err.message));
+                         else resolve(results);
+                     });
+                  }
+            );
+            console.log(response);
+            return response;
+        } catch(error){
+         console.log(error);
+      }
+   }
+
+   async getUsersBetweenSalaries(minSalary, maxSalary){
+      try{
+         const response = await new Promise((resolve, reject) => {
+            const query = "SELECT username, firstname, lastname, salary FROM users WHERE salary BETWEEN ? AND ?;";
+            connection.query(query, [minSalary, maxSalary], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         });
+         console.log(response);
+         return response;
+      } catch(error){
+         console.log(error);
+      }
+   }
+
+   async getUsersBetweenAges(minAge, maxAge){
+      try{
+         const response = await new Promise((resolve, reject) => {
+            const query = "SELECT username, firstname, lastname, age FROM users WHERE age BETWEEN ? AND ?;";
+            connection.query(query, [minAge, maxAge], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         });
+         console.log(response);
+         return response;
+      } catch(error){
+         console.log(error);
+      }
+   }
+
   async registerUser(username, password, firstname, lastname, salary, age){
       try{
          const registerDay = new Date();
@@ -138,7 +207,7 @@ class DbService{
       }  catch(error){
          console.log(error);
       }
-   }     
+   }
 
    async signInUser(username, password){
       try{
@@ -190,6 +259,6 @@ class DbService{
       }  catch(error){
          console.log(error);
       }
-   }
+   }     
 }
 module.exports = DbService;
