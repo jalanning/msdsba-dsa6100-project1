@@ -88,60 +88,8 @@ class DbService{
    the function to pause until the query is completed.
    */
 
-    async getAllData(){
-        try{
-           // use await to call an asynchronous function
-           const response = await new Promise((resolve, reject) => 
-              {
-                  const query = "SELECT * FROM names;";
-                  connection.query(query, 
-                       (err, results) => {
-                             if(err) reject(new Error(err.message));
-                             else resolve(results);
-                       }
-                  );
-               }
-            );
-        
-            // console.log("dbServices.js: search result:");
-            // console.log(response);  // for debugging to see the result of select
-            return response;
-
-        }  catch(error){
-           console.log(error);
-        }
-   }
-
-
-   async insertNewName(name){
-         try{
-            const dateAdded = new Date();
-            // use await to call an asynchronous function
-            const insertId = await new Promise((resolve, reject) => 
-            {
-               const query = "INSERT INTO names (name, date_added) VALUES (?, ?);";
-               connection.query(query, [name, dateAdded], (err, result) => {
-                   if(err) reject(new Error(err.message));
-                   else resolve(result.insertId);
-               });
-            });
-            console.log(insertId);  // for debugging to see the result of select
-            return{
-                 id: insertId,
-                 name: name,
-                 dateAdded: dateAdded
-            }
-         } catch(error){
-               console.log(error);
-         }
-   }
-
-
-
-
    async searchByName(name){
         try{
-             const dateAdded = new Date();
              // use await to call an asynchronous function
              const response = await new Promise((resolve, reject) => 
                   {
@@ -161,52 +109,6 @@ class DbService{
          }
    }
 
-   async deleteRowById(id){
-         try{
-              id = parseInt(id, 10);
-              // use await to call an asynchronous function
-              const response = await new Promise((resolve, reject) => 
-                  {
-                     const query = "DELETE FROM names WHERE id = ?;";
-                     connection.query(query, [id], (err, result) => {
-                          if(err) reject(new Error(err.message));
-                          else resolve(result.affectedRows);
-                     });
-                  }
-               );
-
-               console.log(response);  // for debugging to see the result of select
-               return response === 1? true: false;
-
-         }  catch(error){
-              console.log(error);
-         }
-   }
-
-  
-  async updateNameById(id, newName){
-      try{
-           console.log("dbService: ");
-           console.log(id);
-           console.log(newName);
-           id = parseInt(id, 10);
-           // use await to call an asynchronous function
-           const response = await new Promise((resolve, reject) => 
-               {
-                  const query = "UPDATE names SET name = ? WHERE id = ?;";
-                  connection.query(query, [newName, id], (err, result) => {
-                       if(err) reject(new Error(err.message));
-                       else resolve(result.affectedRows);
-                  });
-               }
-            );
-
-            // console.log(response);  // for debugging to see the result of select
-            return response === 1? true: false;
-      }  catch(error){
-         console.log(error);
-      }
-  }
   async registerUser(username, password, firstname, lastname, salary, age){
       try{
          const registerDay = new Date();
@@ -237,5 +139,31 @@ class DbService{
          console.log(error);
       }
    }     
+
+   async signInUser(username, password){
+      try{
+         const rows = await new Promise((resolve, reject) => {
+            const query = "SELECT 1 FROM users WHERE username = ? AND password = ? LIMIT 1;";
+            connection.query(query, [username, password], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         });
+         if (rows.length === 0)
+            return false;
+         await new Promise((resolve, reject) => {
+            const query = "UPDATE users SET signintime = ? WHERE username = ?;";
+            const signinTime = new Date();
+            connection.query(query, [signinTime, username], (err, result) => {
+               if(err) reject(new Error(err.message));
+               else resolve(result);
+            });
+         });
+         return true;
+      } catch(error){
+         console.log(error);
+         throw error;
+      }
+   }
 }
 module.exports = DbService;

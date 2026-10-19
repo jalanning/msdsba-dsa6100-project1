@@ -1,62 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="stylesheet.css"> -->
-  <script src="index.js"></script>
-  <title>DB Project 1 new</title>
-</head>
-<body>
-  <main>
-      <label>Username:</label>
-      <input type="text" id="username-input">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="stylesheet.css"> -->
+    <script src="index.js" defer></script>
+    <title>DB Project 1 new</title>
+  </head>
+  <body>
+    <main>
+      <section>
+        <label>Username:</label>
+        <input type="text" id="username-input" />
 
-     <br>
-      <label>Password:</label>
-      <input type="password" id="password-input">
+        <br />
+        <label>Password:</label>
+        <input type="password" id="password-input" />
 
-     <br>
-      <label>First Name:</label>
-      <input type="text" id="first-name-input">
+        <br />
+        <label>First Name:</label>
+        <input type="text" id="first-name-input" />
 
-     <br>
-      <label>Last Name:</label>
-      <input type="text" id="last-name-input">
+        <br />
+        <label>Last Name:</label>
+        <input type="text" id="last-name-input" />
 
-     <br>
-      <label>Age:</label>
-      <input type="text" id="age-input">
+        <br />
+        <label>Age:</label>
+        <input type="text" id="age-input" />
 
-     <br>
-      <label>Salary:</label>
-      <input type="text" id="salary-input">
-      <br>
-      <button onclick="addUser()">Add User</button>
- 
-     <br><br><br>
-     <div> 
-        <input placeholder="search by name" id="search-input">
-        <button id="search-btn">Search</button>
-     </div>
+        <br />
+        <label>Salary:</label>
+        <input type="text" id="salary-input" />
+        <br />
+        <button onclick="addUser()">Add User</button>
+      </section>
+      <section>
+        <h2>Sign In</h2>
+        <label>Username:</label>
+        <input type="text" id="signin-username-input" />
+        <br />
+        <label>Password:</label>
+        <input type="password" id="signin-password-input" />
+        <br />
+        <button onclick="signIn()">Sign In</button>
+        <p id="signin-message"></p>
+      </section>
+      <section id="user-list" hidden>
+        <br /><br /><br />
+        <div>
+          <input placeholder="search by name" id="search-input" />
+          <button id="search-btn">Search</button>
+        </div>
 
-
-     <table id="table">
-         <thead>
-             <th>Id</th>
-             <th>Name</th>
-             <th>Date Added</th>
-             <th>Delete</th>
-             <th>Edit</th>  
-         </thead>
-         <tbody></tbody>
-     </table>
-
-     <!-- <section hidden id="update-row">
-         <label>Name:</label>
-         <input type="text" id="update-name-input">
-         <button id="update-row-btn" value="">Update</button>
-    </section> -->
-</main>
-</body>
+        <table id="table">
+          <thead>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Date Added</th>
+            <th>Delete</th>
+            <th>Edit</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </body>
 </html>

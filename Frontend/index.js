@@ -63,13 +63,35 @@ Arrow functions have a few notable features:
 */
 
 
-// fetch call is to call the backend
-document.addEventListener('DOMContentLoaded', function() {
-    // one can point your browser to http://localhost:5050/getAll to check what it returns first.
-    fetch('http://localhost:5050/getAll')     
+function signIn() {
+    const username = document.querySelector('#signin-username-input').value;
+    const password = document.querySelector('#signin-password-input').value;
+    const message = document.querySelector('#signin-message');
+
+    fetch('http://localhost:5050/signin', {
+        headers: {
+            'Content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({username, password})
+    })
     .then(response => response.json())
-    .then(data => loadHTMLTable(data['data']));
-});
+    .then(data => {
+        if (!data.success) {
+            message.textContent = 'Invalid username or password.';
+            return;
+        }
+
+        message.textContent = '';
+        document.querySelector('#user-list').hidden = false;
+        return fetch('http://localhost:5050/getAll');
+    })
+    .then(response => response && response.json())
+    .then(data => data && loadHTMLTable(data.data))
+    .catch(() => {
+        message.textContent = 'Unable to sign in. Please try again.';
+    });
+}
 
 
 // when the addBtn is clicked
@@ -112,157 +134,6 @@ function addUser() {
     })
     .then(response => response.json())
     .then(data => console.log(data));
-}
-
-// when the searchBtn is clicked
-// const searchBtn =  document.querySelector('#search-btn');
-// searchBtn.onclick = function (){
-//     const searchInput = document.querySelector('#search-input');
-//     const searchValue = searchInput.value;
-//     searchInput.value = "";
-
-//     fetch('http://localhost:5050/search/' + searchValue)
-//     .then(response => response.json())
-//     .then(data => loadHTMLTable(data['data']));
-// }
-
-let rowToDelete; 
-
-// when the delete button is clicked, since it is not part of the DOM tree, we need to do it differently
-document.querySelector('table tbody').addEventListener('click', 
-      function(event){
-        if(event.target.className === "delete-row-btn"){
-
-            deleteRowById(event.target.dataset.id);   
-            rowToDelete = event.target.parentNode.parentNode.rowIndex;    
-            debug("delete which one:");
-            debug(rowToDelete);
-        }   
-        if(event.target.className === "edit-row-btn"){
-            showEditRowInterface(event.target.dataset.id); // display the edit row interface
-        }
-      }
-);
-
-function deleteRowById(id){
-    // debug(id);
-    fetch('http://localhost:5050/delete/' + id,
-       { 
-        method: 'DELETE'
-       }
-    )
-    .then(response => response.json())
-    .then(
-         data => {
-             if(data.success){
-                document.getElementById("table").deleteRow(rowToDelete);
-                // location.reload();
-             }
-         }
-    );
-}
-
-let idToUpdate = 0;
-
-function showEditRowInterface(id){
-    debug("id clicked: ");
-    debug(id);
-    document.querySelector('#update-name-input').value = ""; // clear this field
-    const updateSetction = document.querySelector("#update-row");  
-    updateSetction.hidden = false;
-    // we assign the id to the update button as its id attribute value
-    idToUpdate = id;
-    debug("id set!");
-    debug(idToUpdate+"");
-}
-
-
-// when the update button on the update interface is clicked
-const updateBtn = document.querySelector('#update-row-btn');
-
-updateBtn.onclick = function(){
-    debug("update clicked");
-    debug("got the id: ");
-    debug(updateBtn.value);
-    
-    const updatedNameInput = document.querySelector('#update-name-input');
-
-    fetch('http://localhost:5050/update',
-          {
-            headers: {
-                'Content-type': 'application/json'
-            },
-            method: 'PATCH',
-            body: JSON.stringify(
-                  {
-                    id: idToUpdate,
-                    name: updatedNameInput.value
-                  }
-            )
-          }
-    ) 
-    .then(response => response.json())
-    .then(data => {
-        if(data.success){
-            location.reload();
-        }
-        else 
-           debug("no update occurs");
-    })
-}
-
-
-// this function is used for debugging only, and should be deleted afterwards
-function debug(data)
-{
-    fetch('http://localhost:5050/debug', {
-        headers: {
-            'Content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({debug: data})
-    })
-}
-
-function insertRowIntoTable(data){
-
-   debug("index.js: insertRowIntoTable called: ");
-   debug(data);
-
-   const table = document.querySelector('table tbody');
-   debug(table);
-
-   const isTableData = table.querySelector('.no-data');
-
-  // debug(isTableData);
-
-   let tableHtml = "<tr>";
-   
-   for(var key in data){ // iterating over the each property key of an object data
-      if(data.hasOwnProperty(key)){   // key is a direct property for data
-            if(key === 'dateAdded'){  // the property is 'dataAdded'
-                data[key] = new Date(data[key]).toLocaleString(); // format to javascript string
-            }
-            tableHtml += `<td>${data[key]}</td>`;
-      }
-   }
-
-   tableHtml +=`<td><button class="delete-row-btn" data-id=${data.id}>Delete</td>`;
-   tableHtml += `<td><button class="edit-row-btn" data-id=${data.id}>Edit</td>`;
-
-   tableHtml += "</tr>";
-
-    if(isTableData){
-       debug("case 1");
-       table.innerHTML = tableHtml;
-    }
-    else {
-        debug("case 2");
-        // debug(tableHtml);
-
-        const newrow = table.insertRow();
-        newrow.innerHTML = tableHtml;
-    }
 }
 
 function loadHTMLTable(data){
