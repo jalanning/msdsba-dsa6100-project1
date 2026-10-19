@@ -149,6 +149,7 @@ class DbService{
                else resolve(results);
             });
          });
+         console.log(rows)
          if (rows.length === 0)
             return false;
          await new Promise((resolve, reject) => {
@@ -159,10 +160,35 @@ class DbService{
                else resolve(result);
             });
          });
+         console.log('updated signin')
          return true;
       } catch(error){
          console.log(error);
          throw error;
+      }
+   }
+
+   async getAllUsers(){
+      try{
+         // use await to call an asynchronous function
+         const response = await new Promise((resolve, reject) => 
+            {
+               const query = "SELECT * FROM users;";
+               connection.query(query, 
+                     (err, results) => {
+                           if(err) reject(new Error(err.message));
+                           else resolve(results);
+                     }
+               );
+            }
+         );
+
+         // console.log("dbServices.js: search result:");
+         // console.log(response);  // for debugging to see the result of select
+         return response;
+
+      }  catch(error){
+         console.log(error);
       }
    }
 }

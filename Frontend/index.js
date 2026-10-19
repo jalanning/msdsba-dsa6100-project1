@@ -82,9 +82,10 @@ function signIn() {
             return;
         }
 
+        sessionStorage.setItem('authToken', data.token);
         message.textContent = '';
         document.querySelector('#user-list').hidden = false;
-        return fetch('http://localhost:5050/getAll');
+        return authenticatedFetch('http://localhost:5050/getAllUsers');
     })
     .then(response => response && response.json())
     .then(data => data && loadHTMLTable(data.data))
@@ -92,6 +93,38 @@ function signIn() {
         message.textContent = 'Unable to sign in. Please try again.';
     });
 }
+
+function authenticatedFetch(url, options = {}) {
+    const token = sessionStorage.getItem('authToken');
+    return fetch(url, {
+        ...options,
+        headers: {
+            ...options.headers,
+            Authorization: `Bearer ${token}`
+        }
+    });
+}
+
+document.querySelector('#search-btn').addEventListener('click', () => {
+    const name = document.querySelector('#search-input').value.trim();
+    const path = name ? `/search/${encodeURIComponent(name)}` : '/search/all';
+
+    authenticatedFetch(`http://localhost:5050${path}`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTable(data.data))
+        .catch(() => {
+            document.querySelector('#signin-message').textContent = 'Unable to load users.';
+        });
+});
 
 
 // when the addBtn is clicked
@@ -137,8 +170,6 @@ function addUser() {
 }
 
 function loadHTMLTable(data){
-    debug("index.js: loadHTMLTable called.");
-
     const table = document.querySelector('table tbody'); 
     
     if(data.length === 0){
@@ -173,13 +204,12 @@ function loadHTMLTable(data){
     */
 
     let tableHtml = "";
-    data.forEach(function ({id, name, date_added}){
+    data.forEach(function ({username, firstname, lastname, registerday}){
          tableHtml += "<tr>";
-         tableHtml +=`<td>${id}</td>`;
-         tableHtml +=`<td>${name}</td>`;
-         tableHtml +=`<td>${new Date(date_added).toLocaleString()}</td>`;
-         tableHtml +=`<td><button class="delete-row-btn" data-id=${id}>Delete</td>`;
-         tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</td>`;
+         tableHtml +=`<td>${username}</td>`;
+         tableHtml +=`<td>${firstname}</td>`;
+         tableHtml +=`<td>${lastname}</td>`;
+         tableHtml +=`<td>${new Date(registerday).toLocaleString()}</td>`;
          tableHtml += "</tr>";
     });
 
