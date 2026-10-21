@@ -85,6 +85,13 @@ function signIn() {
         sessionStorage.setItem('authToken', data.token);
         message.textContent = '';
         document.querySelector('#user-list').hidden = false;
+        document.querySelector('#search-by-user').hidden = false;
+        document.querySelector('#salary-section').hidden = false;
+        document.querySelector('#age-section').hidden = false;
+        document.querySelector('#users-after-john').hidden = false;
+        document.querySelector('#users-no-signin').hidden = false;
+        document.querySelector('#users-same-register-day-john').hidden = false;
+        document.querySelector('#users-registered-today').hidden = false;
         return authenticatedFetch('http://localhost:5050/getAllUsers');
     })
     .then(response => response && response.json())
@@ -169,8 +176,163 @@ function addUser() {
     .then(data => console.log(data));
 }
 
-function loadHTMLTable(data){
-    const table = document.querySelector('table tbody'); 
+function searchbyUser(){
+    const usernameInput = document.querySelector('#username-search-input');
+    const username = usernameInput.value;
+    usernameInput.value = "";
+    authenticatedFetch(`http://localhost:5050/search/user/${encodeURIComponent(username)}`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTable(data.data, '#username-table tbody'))
+        .catch(() => {
+            document.querySelector('#username-search-message').textContent = 'Unable to load users.';
+        });
+}
+
+function getUserBetweenSalaryRange() {
+    const minSalaryInput = document.querySelector('#min-salary-input');
+    const maxSalaryInput = document.querySelector('#max-salary-input');
+    const minSalary = minSalaryInput.value;
+    const maxSalary = maxSalaryInput.value;
+    minSalaryInput.value = "";
+    maxSalaryInput.value = "";
+    authenticatedFetch(`http://localhost:5050/search/user/between/salary/${encodeURIComponent(minSalary)}/${encodeURIComponent(maxSalary)}`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTableSalary(data.data, '#salary-table tbody'))
+        .catch(() => {
+            document.querySelector('#salary-search-message').textContent = 'Unable to load users.';
+        });
+}
+
+function getUserBetweenAgeRange() {
+    const minAgeInput = document.querySelector('#min-age-input');
+    const maxAgeInput = document.querySelector('#max-age-input');
+    const minAge = minAgeInput.value;
+    const maxAge = maxAgeInput.value;
+    minAgeInput.value = "";
+    maxAgeInput.value = "";
+    authenticatedFetch(`http://localhost:5050/search/user/between/age/${encodeURIComponent(minAge)}/${encodeURIComponent(maxAge)}`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTableAge(data.data, '#age-table tbody'))
+        .catch(() => {
+            document.querySelector('#age-search-message').textContent = 'Unable to load users.';
+        });
+}
+
+function getUsersAfterJohnRegisterDay(){
+
+    const usernameInput = document.querySelector('#username-after-john-input');
+    const username = usernameInput.value;
+    usernameInput.value = "";
+    authenticatedFetch(`http://localhost:5050/search/usersafterjohn/${encodeURIComponent(username)}`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTable(data.data, '#users-after-john-table tbody'))
+        .catch(() => {
+            document.querySelector('#users-after-john-search-message').textContent = 'Unable to load users.';
+        });
+}
+
+function getUsersNoSignIn(){
+    const usernameInput = document.querySelector('#username-no-signin-input');
+    const username = usernameInput.value;
+    usernameInput.value = "";
+    authenticatedFetch(`http://localhost:5050/search/usersnosignin/${encodeURIComponent(username)}`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTable(data.data, '#users-no-signin-table tbody'))
+        .catch(() => {
+            document.querySelector('#users-no-signin-search-message').textContent = 'Unable to load users.';
+        });
+}
+
+function getUsersSameRegisterDayJohn(){
+    const usernameInput = document.querySelector('#username-same-register-day-john-input');
+    const username = usernameInput.value;
+    usernameInput.value = "";
+    authenticatedFetch(`http://localhost:5050/search/userswithsameregisterdayasjohn/${encodeURIComponent(username)}`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTable(data.data, '#users-same-register-day-john-table tbody'))
+        .catch(() => {
+            document.querySelector('#users-same-register-day-john-search-message').textContent = 'Unable to load users.';
+        });
+}
+
+function getRegisteredTodayUsers() {
+    authenticatedFetch(`http://localhost:5050/return/registeredtodayusers`)
+        .then(response => {
+            if (response.status === 401) {
+                sessionStorage.removeItem('authToken');
+                document.querySelector('#user-list').hidden = true;
+                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                return null;
+            }
+            if (!response.ok) throw new Error('Search request failed');
+            return response.json();
+        })
+        .then(data => data && loadHTMLTable(data.data, '#users-registered-today-table tbody'))
+        .catch(() => {
+            document.querySelector('#users-registered-today-search-message').textContent = 'Unable to load users.';
+        });
+}
+
+// when the addBtn is clicked
+
+
+
+function loadHTMLTable(data, tableId = 'table tbody'){
+    const table = document.querySelector(tableId); 
     
     if(data.length === 0){
         table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
@@ -215,3 +377,48 @@ function loadHTMLTable(data){
 
     table.innerHTML = tableHtml;
 }
+
+function loadHTMLTableSalary(data, tableId = 'table tbody'){
+    const table = document.querySelector(tableId); 
+    
+    if(data.length === 0){
+        table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
+        return;
+    }
+
+    let tableHtml = "";
+    data.forEach(function ({username, firstname, lastname, salary}){
+         tableHtml += "<tr>";
+         tableHtml +=`<td>${username}</td>`;
+         tableHtml +=`<td>${firstname}</td>`;
+         tableHtml +=`<td>${lastname}</td>`;
+         tableHtml +=`<td>${salary}</td>`;
+         tableHtml += "</tr>";
+    });
+
+    table.innerHTML = tableHtml;
+}
+
+function loadHTMLTableAge(data, tableId = 'table tbody'){
+    const table = document.querySelector(tableId); 
+    
+    if(data.length === 0){
+        table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
+        return;
+    }
+
+    let tableHtml = "";
+    data.forEach(function ({username, firstname, lastname, age}){
+         tableHtml += "<tr>";
+         tableHtml +=`<td>${username}</td>`;
+         tableHtml +=`<td>${firstname}</td>`;
+         tableHtml +=`<td>${lastname}</td>`;
+         tableHtml +=`<td>${age}</td>`;
+         tableHtml += "</tr>";
+    });
+
+    table.innerHTML = tableHtml;
+}
+
+
+

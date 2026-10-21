@@ -104,12 +104,49 @@ app.get('/search/user/between/salary/:min/:max', requireAuth, (request, response
     .catch(err => console.log(err));
 });
 
+app.get('/search/usersafterjohn/:username', requireAuth, (request, response) => {
+    const {username} = request.params;
+    console.log(username);
+    const db = dbService.getDbServiceInstance();
+    const result = db.getUsersAfterJohnRegisterDay(username);
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
 app.get('/search/user/between/age/:min/:max', requireAuth, (request, response) => {
     const {min, max} = request.params;
     console.log(min, max);
     const db = dbService.getDbServiceInstance();
     const result = db.getUsersBetweenAges(min, max);
     result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+app.get('/search/usersnosignin/:username', requireAuth, (request, response) => {
+    const {username} = request.params;
+    console.log(username);
+    const db = dbService.getDbServiceInstance();
+    const result = db.getUsersNoSignIn(username);
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+app.get('/search/userswithsameregisterdayasjohn/:username', requireAuth, (request, response) => {
+    const {username} = request.params;
+    console.log(username);
+    const db = dbService.getDbServiceInstance();
+    const result = db.getUsersSameRegisterDayJohn(username);
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+app.get('/return/registeredtodayusers', requireAuth, (request, response) => {
+    const db = dbService.getDbServiceInstance();
+    db.getRegisteredTodayUsers()
     .then(data => response.json({data: data}))
     .catch(err => console.log(err));
 });

@@ -63,6 +63,133 @@
           <tbody></tbody>
         </table>
       </section>
+      <section id ="search-by-user" hidden>
+        <h2>Search by Username</h2>
+        <div>
+          <input placeholder="search by username" id="username-search-input">
+          <button onclick="searchbyUser()">Search</button>
+          <p id="username-search-message"></p>
+        </div>
+
+        <table id="username-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date Added</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section id="salary-section" hidden>
+        <h2>Search Between Salaries</h2>
+        <div>
+          <label>Minimum Salary:</label>
+          <input placeholder="Minimum Salary" id="min-salary-input">
+          <label>Maximum Salary:</label>
+          <input placeholder="Maximum Salary" id="max-salary-input">
+          <button onclick="getUserBetweenSalaryRange()">Search</button>
+          <p id="salary-search-message"></p>
+        </div>
+
+        <table id="salary-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Salary</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section id="age-section" hidden>
+        <h2>Search Between Ages</h2>
+        <div>
+          <label>Minimum Age:</label>
+          <input placeholder="Minimum Age" id="min-age-input">
+          <label>Maximum Age:</label>
+          <input placeholder="Maximum Age" id="max-age-input">
+          <button onclick="getUserBetweenAgeRange()">Search</button>
+          <p id="age-search-message"></p>
+        </div>
+
+        <table id="age-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section id="users-after-john" hidden>
+        <h2>Search Users Registered After John</h2>
+        <div>
+          <input placeholder="Enter username" id="username-after-john-input">
+          <button onclick="getUsersAfterJohnRegisterDay()">Search</button>
+          <p id="users-after-john-search-message"></p>
+        </div>
+        <table id="users-after-john-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date Added</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section id="users-no-signin" hidden>
+        <h2>Search Users Who Haven't Signed In</h2>
+        <div>
+          <input placeholder="Enter username" id="username-no-signin-input">
+          <button onclick="getUsersNoSignIn()">Search</button>
+          <p id="users-no-signin-search-message"></p>
+        </div>
+        <table id="users-no-signin-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date Added</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section id="users-same-register-day-john" hidden>
+        <h2>Search Users with Same Register Day as John</h2>
+        <div>
+          <input placeholder="Enter username" id="username-same-register-day-john-input">
+          <button onclick="getUsersSameRegisterDayJohn()">Search</button>
+          <p id="users-same-register-day-john-search-message"></p>
+        </div>
+        <table id="users-same-register-day-john-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date Added</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section id="users-registered-today" hidden>
+        <h2>Return Users Registered Today</h2>
+        <div>
+          <button onclick="getRegisteredTodayUsers()">Get Users</button>
+          <p id="users-registered-today-search-message"></p>
+        </div>
+        <table id="users-registered-today-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date Added</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
     </main>
   </body>
 </html>

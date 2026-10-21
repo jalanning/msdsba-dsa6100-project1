@@ -93,8 +93,8 @@ class DbService{
              // use await to call an asynchronous function
              const response = await new Promise((resolve, reject) => 
                   {
-                     const query = "SELECT * FROM names where name = ?;";
-                     connection.query(query, [name], (err, results) => {
+                     const query = "SELECT * FROM users where firstname = ? OR lastname = ?;";
+                     connection.query(query, [name, name], (err, results) => {
                          if(err) reject(new Error(err.message));
                          else resolve(results);
                      });
@@ -107,25 +107,6 @@ class DbService{
          }  catch(error){
             console.log(error);
          }
-   }
-
-   
-   async getUserByName(name){
-        try{
-             const response = await new Promise((resolve, reject) => 
-                  {
-                     const query = "SELECT username, firstname, lastname, registerday FROM users WHERE firstname = ? OR lastname = ?;";
-                     connection.query(query, [name, name], (err, results) => {
-                         if(err) reject(new Error(err.message));
-                         else resolve(results);
-                     });
-                  }
-            );
-            console.log(response);
-            return response;
-        } catch(error){
-         console.log(error);
-      }
    }
 
    async getUserByUsername(username){
@@ -178,10 +159,76 @@ class DbService{
       }
    }
 
+   async getUsersAfterJohnRegisterDay(username){
+      try{
+         const response = await new Promise((resolve, reject) => {
+            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ? AND registerday > (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);";
+            connection.query(query, [username], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         });
+         console.log(response);
+         return response;
+      } catch(error){
+         console.log(error);
+      }
+   }
+
+   async getUsersNoSignIn(username){
+      try{
+         const null_day = new Date(null);
+         const response = await new Promise((resolve, reject) => {
+            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ? AND signintime = ?;";
+            connection.query(query, [username, null_day], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         });
+         console.log(response);
+         return response;
+      } catch(error){
+         console.log(error);
+      }
+   }
+
+   async getUsersSameRegisterDayJohn(username){
+      try{
+         const response = await new Promise((resolve, reject) => {
+            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ? AND registerday = (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);";
+            connection.query(query, [username], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         });
+         console.log(response);
+         return response;
+      } catch(error){
+         console.log(error);
+      }
+   }
+
+   async getRegisteredTodayUsers(){
+      try{
+         const today = new Date();
+         const response = await new Promise((resolve, reject) => {
+            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE DATE(registerday) = DATE(?);";
+            connection.query(query, [today], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         });
+         console.log(response);
+         return response;
+      } catch(error){
+         console.log(error);
+      }
+   }
+
   async registerUser(username, password, firstname, lastname, salary, age){
       try{
          const registerDay = new Date();
-         const signinTime = new Date();
+         const signinTime = new Date(null); // set to NULL initially, will be updated when the user signs in
          // use await to call an asynchronous function
          const response = await new Promise((resolve, reject) => 
              {
