@@ -91,13 +91,26 @@ class DbService{
    async searchByName(name){
         try{
              // use await to call an asynchronous function
+             const names = name.split(" ");
+             if (names.length > 2) {
+                throw new Error("Invalid name format. Please provide a first and/or last name.");
+             }
              const response = await new Promise((resolve, reject) => 
                   {
-                     const query = "SELECT * FROM users where firstname = ? OR lastname = ?;";
-                     connection.query(query, [name, name], (err, results) => {
-                         if(err) reject(new Error(err.message));
-                         else resolve(results);
-                     });
+                     if (names.length === 2) {
+                        const query = "SELECT * FROM users where firstname = ? AND lastname = ?;";
+                        connection.query(query, [names[0], names[1]], (err, results) => {
+                            if(err) reject(new Error(err.message));
+                            else resolve(results);
+                        });
+                     }
+                     if (names.length === 1) {
+                        const query = "SELECT * FROM users where firstname = ? OR lastname = ?;";
+                        connection.query(query, [names[0], names[0]], (err, results) => {
+                           if(err) reject(new Error(err.message));
+                           else resolve(results);
+                        });
+                     }
                   }
              );
 
