@@ -126,7 +126,7 @@ class DbService{
          try{
              const response = await new Promise((resolve, reject) => 
                   {
-                     const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ?;";
+                     const query = "SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE username = ?;";
                      connection.query(query, [username], (err, results) => {
                          if(err) reject(new Error(err.message));
                          else resolve(results);
@@ -143,7 +143,7 @@ class DbService{
    async getUsersBetweenSalaries(minSalary, maxSalary){
       try{
          const response = await new Promise((resolve, reject) => {
-            const query = "SELECT username, firstname, lastname, salary FROM users WHERE salary BETWEEN ? AND ?;";
+            const query = "SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE salary BETWEEN ? AND ?;";
             connection.query(query, [minSalary, maxSalary], (err, results) => {
                if(err) reject(new Error(err.message));
                else resolve(results);
@@ -159,7 +159,7 @@ class DbService{
    async getUsersBetweenAges(minAge, maxAge){
       try{
          const response = await new Promise((resolve, reject) => {
-            const query = "SELECT username, firstname, lastname, age FROM users WHERE age BETWEEN ? AND ?;";
+            const query = "SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE age BETWEEN ? AND ?;";
             connection.query(query, [minAge, maxAge], (err, results) => {
                if(err) reject(new Error(err.message));
                else resolve(results);
@@ -172,11 +172,11 @@ class DbService{
       }
    }
 
-   async getUsersAfterJohnRegisterDay(username){
+   async getUsersAfterJohnRegisterDay(){
       try{
          const response = await new Promise((resolve, reject) => {
-            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ? AND registerday > (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);";
-            connection.query(query, [username], (err, results) => {
+            const query = "SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE registerday > (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);";
+            connection.query(query, (err, results) => {
                if(err) reject(new Error(err.message));
                else resolve(results);
             });
@@ -188,12 +188,11 @@ class DbService{
       }
    }
 
-   async getUsersNoSignIn(username){
+   async getUsersNoSignIn(){
       try{
-         const null_day = new Date(null);
          const response = await new Promise((resolve, reject) => {
-            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ? AND signintime = ?;";
-            connection.query(query, [username, null_day], (err, results) => {
+            const query = "SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE signintime IS NULL;";
+            connection.query(query, (err, results) => {
                if(err) reject(new Error(err.message));
                else resolve(results);
             });
@@ -205,11 +204,11 @@ class DbService{
       }
    }
 
-   async getUsersSameRegisterDayJohn(username){
+   async getUsersSameRegisterDayJohn(){
       try{
          const response = await new Promise((resolve, reject) => {
-            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE username = ? AND registerday = (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);";
-            connection.query(query, [username], (err, results) => {
+            const query = "SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE registerday = (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);";
+            connection.query(query, (err, results) => {
                if(err) reject(new Error(err.message));
                else resolve(results);
             });
@@ -223,10 +222,9 @@ class DbService{
 
    async getRegisteredTodayUsers(){
       try{
-         const today = new Date();
          const response = await new Promise((resolve, reject) => {
-            const query = "SELECT username, firstname, lastname, registerday FROM users WHERE DATE(registerday) = DATE(?);";
-            connection.query(query, [today], (err, results) => {
+            const query = "SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE DATE(registerday) = DATE(CURDATE());";
+            connection.query(query, (err, results) => {
                if(err) reject(new Error(err.message));
                else resolve(results);
             });
@@ -241,12 +239,11 @@ class DbService{
   async registerUser(username, password, firstname, lastname, salary, age){
       try{
          const registerDay = new Date();
-         const signinTime = new Date(null); // set to NULL initially, will be updated when the user signs in
          // use await to call an asynchronous function
          const response = await new Promise((resolve, reject) => 
              {
-                const query = "INSERT INTO users (username, password, firstname, lastname, salary, age, registerday, signintime) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-                connection.query(query, [username, password, firstname, lastname, salary, age, registerDay, signinTime], (err, result) => {
+                const query = "INSERT INTO users (username, password, firstname, lastname, salary, age, registerday) VALUES (?, ?, ?, ?, ?, ?, ?);";
+                connection.query(query, [username, password, firstname, lastname, salary, age, registerDay], (err, result) => {
                      if(err) reject(new Error(err.message));
                      else resolve(result.insertId);
                 });
@@ -260,8 +257,7 @@ class DbService{
             lastname: lastname,
             salary: salary,
             age: age,
-            registerday: registerDay,
-            signintime: signinTime
+            registerday: registerDay
           }  
 
       }  catch(error){

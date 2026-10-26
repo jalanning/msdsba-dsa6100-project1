@@ -44,130 +44,135 @@ app.post('/register/user', (request, response) => {
     console.log("app: register a user.");
     const {username, password, firstname, lastname, salary, age} = request.body;
     const db = dbService.getDbServiceInstance();
-    const result = db.registerUser(username, password, firstname, lastname, salary, age);
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+    db.registerUser(username, password, firstname, lastname, salary, age)
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
 
 app.post('/signin', async (request, response) => {
-    const {username, password} = request.body;
-    const db = dbService.getDbServiceInstance();
-    try {
-        const success = await db.signInUser(username, password);
-        if (!success) {
-            return response.status(401).json({success: false});
-        }
-        if (!process.env.JWT_SECRET) {
-            return response.status(500).json({success: false, error: 'Authentication is not configured'});
-        }
-
-        const token = jwt.sign({username}, process.env.JWT_SECRET, {expiresIn: '1h'});
-        response.json({success: true, token});
-    } catch (err) {
-        console.log(err);
-        response.status(500).json({success: false});
+    if (!process.env.JWT_SECRET) {
+        return response.status(500).json({success: false, error: 'Authentication is not configured'});
     }
+    const {username, password} = request.body;
+    
+    const db = dbService.getDbServiceInstance();
+    db.signInUser(username, password)
+        .then(success => {
+            if (!success) {
+                return response.status(401).json({success: false});
+            }
+
+            const token = jwt.sign({username}, process.env.JWT_SECRET, {expiresIn: '1h'});
+            response.json({success: true, token});
+        })
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({success: false});
+        });
 });
 
 
-app.get('/search/:name', requireAuth, (request, response) => { // we can debug by URL
-    
-    const {name} = request.params;
-    
+app.get('/search/byName', requireAuth, (request, response) => { // we can debug by URL
+    const {name} = request.query;
     console.log(name);
-
     const db = dbService.getDbServiceInstance();
-
     db.searchByName(name)
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
 
-app.get('/search/user/:username', requireAuth, (request, response) => {
-    const {username} = request.params;
+app.get('/search/byUsername', requireAuth, (request, response) => {
+    const {username} = request.query;
     console.log(username);
     const db = dbService.getDbServiceInstance();
-    const result = db.getUserByUsername(username);
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+    db.getUserByUsername(username)
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
 
-app.get('/search/user/between/salary/:min/:max', requireAuth, (request, response) => {
-    const {min, max} = request.params;
+app.get('/search/bySalary', requireAuth, (request, response) => {
+    const {min, max} = request.query;
     console.log(min, max);
     const db = dbService.getDbServiceInstance();
-    const result = db.getUsersBetweenSalaries(min, max);
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+    db.getUsersBetweenSalaries(min, max)
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
 
-app.get('/search/usersafterjohn/:username', requireAuth, (request, response) => {
-    const {username} = request.params;
-    console.log(username);
-    const db = dbService.getDbServiceInstance();
-    const result = db.getUsersAfterJohnRegisterDay(username);
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
-});
-
-app.get('/search/user/between/age/:min/:max', requireAuth, (request, response) => {
-    const {min, max} = request.params;
+app.get('/search/byAge', requireAuth, (request, response) => {
+    const {min, max} = request.query;
     console.log(min, max);
     const db = dbService.getDbServiceInstance();
-    const result = db.getUsersBetweenAges(min, max);
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+    db.getUsersBetweenAges(min, max)
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
 
-app.get('/search/usersnosignin/:username', requireAuth, (request, response) => {
-    const {username} = request.params;
-    console.log(username);
+app.get('/list/usersafterjohn', requireAuth, (request, response) => {
     const db = dbService.getDbServiceInstance();
-    const result = db.getUsersNoSignIn(username);
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+    db.getUsersAfterJohnRegisterDay()
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
 
-app.get('/search/userswithsameregisterdayasjohn/:username', requireAuth, (request, response) => {
-    const {username} = request.params;
-    console.log(username);
+
+app.get('/list/userswithsameregisterdayasjohn', requireAuth, (request, response) => {
     const db = dbService.getDbServiceInstance();
-    const result = db.getUsersSameRegisterDayJohn(username);
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+    db.getUsersSameRegisterDayJohn()
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
 
-app.get('/return/registeredtodayusers', requireAuth, (request, response) => {
+app.get('/list/usersnosignin', requireAuth, (request, response) => {
+    const db = dbService.getDbServiceInstance();
+    db.getUsersNoSignIn()
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
+});
+
+app.get('/list/registeredtodayusers', requireAuth, (request, response) => {
     const db = dbService.getDbServiceInstance();
     db.getRegisteredTodayUsers()
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
-
-app.get('/getAllUsers', requireAuth, (request, response) => {
+    
+app.get('/list/all', requireAuth, (request, response) => {
     const db = dbService.getDbServiceInstance();
     db.getAllUsers()
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
+        .then(data => response.json({data: data}))
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({error: 'Internal server error'});
+        });
 });
-
-
-// set up the web server listener
-// if we use .env to configure
-/*
-app.listen(process.env.PORT, 
-    () => {
-        console.log("I am listening on the configured port " + process.env.PORT)
-    }
-);
-*/
 
 // if we configure here directly
 app.listen(5050, 

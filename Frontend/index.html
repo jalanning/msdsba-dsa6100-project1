@@ -6,6 +6,23 @@
     <!-- <link rel="stylesheet" href="stylesheet.css"> -->
     <script src="index.js" defer></script>
     <title>DB Project 1 new</title>
+    <style>
+      table {
+        /* Merges cell borders into a single clean line instead of double borders */
+        border-collapse: collapse; 
+        width: 100%;
+      }
+
+      /* Applies the gridlines to the outer table framework and inner cells */
+      table, th, td {
+        border: 1px solid #cccccc; 
+      }
+
+      th, td {
+        padding: 10px;
+        text-align: left;
+      }
+    </style>
   </head>
   <body>
     <main>
@@ -55,22 +72,46 @@
         </section>
       </details>
       <section id="user-list" hidden>
-        <br /><br /><br />
+        <h2>Display All Users</h2>
         <div>
-          <input placeholder="search by first and/or last name" size="25" id="search-input" />
-          <button id="search-btn">Search</button>
+          <button onclick="getAllUsers()">Show users</button>
         </div>
-
-        <table id="table">
+        <table id="all-users-table">
           <thead>
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date Added</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
       </section>
+
+      <section id="search-by-name" hidden>
+        <h2>Search by first or last name (or both)</h2>
+        <div>
+          <input placeholder="john doe" id="name-search-input">
+          <button onclick="searchbyName()">Search</button>
+          <p id="name-search-message"></p>
+        </div>
+
+        <table id="name-table">
+          <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
       <section id ="search-by-user" hidden>
         <h2>Search by Username</h2>
         <div>
@@ -84,7 +125,10 @@
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date Added</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
@@ -105,7 +149,10 @@
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Age</th>
             <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
@@ -127,14 +174,16 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
       </section>
       <section id="users-after-john" hidden>
-        <h2>Search Users Registered After John</h2>
+        <h2>Users Registered After John</h2>
         <div>
-          <input placeholder="Enter username" id="username-after-john-input">
           <button onclick="getUsersAfterJohnRegisterDay()">Search</button>
           <p id="users-after-john-search-message"></p>
         </div>
@@ -143,16 +192,18 @@
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date Added</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
       </section>
       <section id="users-no-signin" hidden>
-        <h2>Search Users Who Haven't Signed In</h2>
+        <h2>Users Who Haven't Signed In</h2>
         <div>
-          <input placeholder="Enter username" id="username-no-signin-input">
-          <button onclick="getUsersNoSignIn()">Search</button>
+          <button onclick="getUsersNoSignIn()">Get Users</button>
           <p id="users-no-signin-search-message"></p>
         </div>
         <table id="users-no-signin-table">
@@ -160,16 +211,18 @@
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date Added</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
       </section>
       <section id="users-same-register-day-john" hidden>
-        <h2>Search Users with Same Register Day as John</h2>
+        <h2>Users with Same Register Day as John</h2>
         <div>
-          <input placeholder="Enter username" id="username-same-register-day-john-input">
-          <button onclick="getUsersSameRegisterDayJohn()">Search</button>
+          <button onclick="getUsersSameRegisterDayJohn()">Get Users</button>
           <p id="users-same-register-day-john-search-message"></p>
         </div>
         <table id="users-same-register-day-john-table">
@@ -177,13 +230,16 @@
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date Added</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
       </section>
       <section id="users-registered-today" hidden>
-        <h2>Return Users Registered Today</h2>
+        <h2>Users Registered Today</h2>
         <div>
           <button onclick="getRegisteredTodayUsers()">Get Users</button>
           <p id="users-registered-today-search-message"></p>
@@ -193,7 +249,10 @@
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date Added</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Register Day</th>
+            <th>Last Signin Time</th>
           </thead>
           <tbody></tbody>
         </table>
