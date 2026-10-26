@@ -9,43 +9,51 @@
   </head>
   <body>
     <main>
-      <section>
-        <label>Username:</label>
-        <input type="text" id="username-input" />
+      <details>
+        <summary>User Registration
+        </summary>
+          <section>
 
-        <br />
-        <label>Password:</label>
-        <input type="password" id="password-input" />
-
-        <br />
-        <label>First Name:</label>
-        <input type="text" id="first-name-input" />
-
-        <br />
-        <label>Last Name:</label>
-        <input type="text" id="last-name-input" />
-
-        <br />
-        <label>Age:</label>
-        <input type="text" id="age-input" />
-
-        <br />
-        <label>Salary:</label>
-        <input type="text" id="salary-input" />
-        <br />
-        <button onclick="addUser()">Add User</button>
-      </section>
-      <section>
-        <h2>Sign In</h2>
-        <label>Username:</label>
-        <input type="text" id="signin-username-input" />
-        <br />
-        <label>Password:</label>
-        <input type="password" id="signin-password-input" />
-        <br />
-        <button onclick="signIn()">Sign In</button>
-        <p id="signin-message"></p>
-      </section>
+            <label>Username:</label>
+            <input type="text" id="username-input" />
+            
+            <br />
+            <label>Password:</label>
+            <input type="password" id="password-input" />
+            
+            <br />
+            <label>First Name:</label>
+            <input type="text" id="first-name-input" />
+            
+            <br />
+            <label>Last Name:</label>
+            <input type="text" id="last-name-input" />
+            
+            <br />
+            <label>Age:</label>
+            <input type="text" id="age-input" />
+            
+            <br />
+            <label>Salary:</label>
+            <input type="text" id="salary-input" />
+            <br />
+            <button onclick="addUser()">Add User</button>
+          </section>
+      </details>
+      <details>
+        <summary>Sign In</summary>
+        <section>
+          <h2>Sign In</h2>
+          <label>Username:</label>
+          <input type="text" id="signin-username-input" />
+          <br />
+          <label>Password:</label>
+          <input type="password" id="signin-password-input" />
+          <br />
+          <button onclick="signIn()">Sign In</button>
+          <p id="signin-message"></p>
+        </section>
+      </details>
       <section id="user-list" hidden>
         <br /><br /><br />
         <div>
