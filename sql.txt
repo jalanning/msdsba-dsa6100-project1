@@ -8,3 +8,15 @@ CREATE TABLE Users(
     registerday DATE, 
     signintime DATETIME 
 );
+
+INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime) VALUES
+('john', 'johnPass123!', 'John', 'Miller', 68500.00, 29, '2024-01-15', '2026-10-25 08:14:22'),
+('asmith', 'A$mith2024', 'Alice', 'Smith', 74250.50, 34, '2023-07-08', NULL),
+('bwilson', 'BW!lson88', 'Brian', 'Wilson', 59100.75, 27, '2024-03-21', '2026-10-24 18:30:45'),
+('cgarcia', 'Garcia#56', 'Carla', 'Garcia', 81200.00, 41, '2022-11-13', '2026-10-26 12:05:19'),
+('dlee', 'LeePass789', 'David', 'Lee', 63850.25, 31, '2024-06-02', '2026-10-25 21:44:03'),
+('ejohnson', 'EJ_secure1', 'Emma', 'Johnson', 90500.00, 38, '2021-09-27', '2026-10-26 09:17:56'),
+('fmartinez', 'Mart!nez44', 'Frank', 'Martinez', 55400.00, 24, '2025-02-10', '2026-10-23 16:28:31'),
+('gbrown', 'Brown2025$', 'Grace', 'Brown', 77950.80, 36, '2023-12-05', '2026-10-26 11:02:08'),
+('hdavis', 'HDavis#321', 'Henry', 'Davis', 62300.40, 28, '2024-08-19', NULL),
+('iwalker', 'Walker@99', 'Isabella', 'Walker', 85725.90, 45, '2022-05-30', '2026-10-26 08:48:27');
