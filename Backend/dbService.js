@@ -2,6 +2,8 @@
 
 const mysql = require('mysql');
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
+
 dotenv.config(); // read from .env file
 
 let instance = null; 
@@ -222,14 +224,24 @@ class DbService{
       }
    }
 
+  async hashPassword(plainTextPassword) {
+      // 10 to 12 salt rounds is optimal for modern security/performance balance
+      const saltRounds = 10; 
+   
+      // Generates salt and hashes the password automatically
+      const hashedPassword = await bcrypt.hash(plainTextPassword, saltRounds);
+      return hashedPassword;
+  }
+
   async registerUser(username, password, firstname, lastname, salary, age){
       try{
          const registerDay = new Date();
+         const hashedPassword = await this.hashPassword(password);
          // use await to call an asynchronous function
          const response = await new Promise((resolve, reject) => 
              {
                 const query = "INSERT INTO users (username, password, firstname, lastname, salary, age, registerday) VALUES (?, ?, ?, ?, ?, ?, ?);";
-                connection.query(query, [username, password, firstname, lastname, salary, age, registerDay], (err, result) => {
+                connection.query(query, [username, hashedPassword, firstname, lastname, salary, age, registerDay], (err, result) => {
                      if(err) reject(new Error(err.message));
                      else resolve(result.insertId);
                 });
@@ -238,7 +250,7 @@ class DbService{
           console.log(response);
           return {
             username: username,
-            password: password,
+            password: hashedPassword,
             firstname: firstname,
             lastname: lastname,
             salary: salary,
@@ -254,8 +266,8 @@ class DbService{
    async signInUser(username, password){
       try{
          const rows = await new Promise((resolve, reject) => {
-            const query = "SELECT 1 FROM users WHERE username = ? AND password = ? LIMIT 1;";
-            connection.query(query, [username, password], (err, results) => {
+            const query = "SELECT password FROM users WHERE username = ? LIMIT 1;";
+            connection.query(query, [username], (err, results) => {
                if(err) reject(new Error(err.message));
                else resolve(results);
             });
@@ -263,6 +275,11 @@ class DbService{
          console.log(rows)
          if (rows.length === 0)
             return false;
+
+         const hashedPassword = rows[0].password;
+         const passwordMatch = await bcrypt.compare(password, hashedPassword);
+         if (!passwordMatch) return false;
+
          await new Promise((resolve, reject) => {
             const query = "UPDATE users SET signintime = ? WHERE username = ?;";
             const signinTime = new Date();
