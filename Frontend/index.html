@@ -27,9 +27,10 @@
   <body>
     <main>
       <details>
-        <summary>User Registration
+        <summary>1 - User Registration
         </summary>
           <section>
+            <h2>1 - User Registration</h2>
 
             <label>Username:</label>
             <input type="text" id="username-input" />
@@ -57,10 +58,11 @@
             <button onclick="addUser()">Add User</button>
           </section>
       </details>
+      <br />
       <details>
-        <summary>Sign In</summary>
+        <summary>2 - Sign In</summary>
         <section>
-          <h2>Sign In</h2>
+          <h2>2 - Sign In</h2>
           <label>Username:</label>
           <input type="text" id="signin-username-input" />
           <br />
@@ -91,7 +93,7 @@
       </section>
 
       <section id="search-by-name" hidden>
-        <h2>Search by first or last name (or both)</h2>
+        <h2>3 - Search by first or last name (or both)</h2>
         <div>
           <input placeholder="john doe" id="name-search-input">
           <button onclick="searchbyName()">Search</button>
@@ -113,7 +115,7 @@
       </section>
 
       <section id ="search-by-user" hidden>
-        <h2>Search by Username</h2>
+        <h2>4 - Search by Username</h2>
         <div>
           <input placeholder="search by username" id="username-search-input">
           <button onclick="searchbyUser()">Search</button>
@@ -134,7 +136,7 @@
         </table>
       </section>
       <section id="salary-section" hidden>
-        <h2>Search Between Salaries</h2>
+        <h2>5 - Search Between Salaries</h2>
         <div>
           <label>Minimum Salary:</label>
           <input placeholder="Minimum Salary" id="min-salary-input">
@@ -158,7 +160,7 @@
         </table>
       </section>
       <section id="age-section" hidden>
-        <h2>Search Between Ages</h2>
+        <h2>6 - Search Between Ages</h2>
         <div>
           <label>Minimum Age:</label>
           <input placeholder="Minimum Age" id="min-age-input">
@@ -182,7 +184,7 @@
         </table>
       </section>
       <section id="users-after-john" hidden>
-        <h2>Users Registered After John</h2>
+        <h2>7 - Users Registered After John</h2>
         <div>
           <button onclick="getUsersAfterJohnRegisterDay()">Search</button>
           <p id="users-after-john-search-message"></p>
@@ -201,7 +203,7 @@
         </table>
       </section>
       <section id="users-no-signin" hidden>
-        <h2>Users Who Haven't Signed In</h2>
+        <h2>8 - Users Who Haven't Signed In</h2>
         <div>
           <button onclick="getUsersNoSignIn()">Get Users</button>
           <p id="users-no-signin-search-message"></p>
@@ -220,7 +222,7 @@
         </table>
       </section>
       <section id="users-same-register-day-john" hidden>
-        <h2>Users with Same Register Day as John</h2>
+        <h2>9 - Users with Same Register Day as John</h2>
         <div>
           <button onclick="getUsersSameRegisterDayJohn()">Get Users</button>
           <p id="users-same-register-day-john-search-message"></p>
@@ -239,7 +241,7 @@
         </table>
       </section>
       <section id="users-registered-today" hidden>
-        <h2>Users Registered Today</h2>
+        <h2>10 - Users Registered Today</h2>
         <div>
           <button onclick="getRegisteredTodayUsers()">Get Users</button>
           <p id="users-registered-today-search-message"></p>
