@@ -10,6 +10,12 @@ function hideOrShowElements(show) {
     document.querySelector('#users-registered-today').hidden = !show;
 }
 
+function handle401() {
+    sessionStorage.removeItem('authToken');
+    hideOrShowElements(false);
+    document.querySelector('#signin-message').textContent = 'Please sign in again.';
+}
+
 function signIn() {
     const username = document.querySelector('#signin-username-input').value;
     const password = document.querySelector('#signin-password-input').value;
@@ -90,9 +96,7 @@ function getAllUsers() {
     authenticatedFetch('http://localhost:5050/list/all')
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Request failed');
@@ -110,9 +114,7 @@ function searchbyName(){
     authenticatedFetch(`http://localhost:5050/search/byName?name=${encodeURIComponent(name)}`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#name-search-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
@@ -130,9 +132,7 @@ function searchbyUser(){
     authenticatedFetch(`http://localhost:5050/search/byUsername?username=${encodeURIComponent(username)}`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#username-search-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
@@ -152,9 +152,7 @@ function getUserBetweenSalaryRange() {
     authenticatedFetch(`http://localhost:5050/search/bySalary?min=${encodeURIComponent(minSalary)}&max=${encodeURIComponent(maxSalary)}`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#salary-search-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
@@ -174,9 +172,7 @@ function getUserBetweenAgeRange() {
     authenticatedFetch(`http://localhost:5050/search/byAge?min=${encodeURIComponent(minAge)}&max=${encodeURIComponent(maxAge)}`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
@@ -192,9 +188,7 @@ function getUsersAfterJohnRegisterDay(){
     authenticatedFetch(`http://localhost:5050/list/usersafterjohn/`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
@@ -210,9 +204,7 @@ function getUsersNoSignIn(){
     authenticatedFetch(`http://localhost:5050/list/usersnosignin`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
@@ -228,9 +220,7 @@ function getUsersSameRegisterDayJohn(){
     authenticatedFetch(`http://localhost:5050/list/userswithsameregisterdayasjohn`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
@@ -246,9 +236,7 @@ function getRegisteredTodayUsers() {
     authenticatedFetch(`http://localhost:5050/list/registeredtodayusers`)
         .then(response => {
             if (response.status === 401) {
-                sessionStorage.removeItem('authToken');
-                hideOrShowElements(false);
-                document.querySelector('#signin-message').textContent = 'Please sign in again.';
+                handle401();
                 return null;
             }
             if (!response.ok) throw new Error('Search request failed');
