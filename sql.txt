@@ -9,16 +9,6 @@ CREATE TABLE Users(
     signintime DATETIME 
 );
 
-1. INSERT INTO users (username, password, firstname, lastname, salary, age, registerday) VALUES (?, ?, ?, ?, ?, ?, ?);
-2. SELECT password FROM users WHERE username = ? LIMIT 1;, UPDATE users SET signintime = ? WHERE username = ?;
-3. SELECT * FROM users where firstname = ? OR lastname = ? or concat(firstname, ' ', lastname) = ?;
-4. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE username = ?;
-5. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE salary BETWEEN ? AND ?;
-6. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE age BETWEEN ? AND ?;
-7. SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE registerday > (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);
-8.SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE signintime IS NULL;
-9. SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE registerday = (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);
-10. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE DATE(registerday) = DATE(CURDATE());
 
 INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime) VALUES
 ('john', 'johnPass123!', 'John', 'Miller', 68500.00, 29, '2024-01-15', '2026-10-25 08:14:22'),
@@ -31,3 +21,14 @@ INSERT INTO Users (username, password, firstname, lastname, salary, age, registe
 ('gbrown', 'Brown2025$', 'Grace', 'Brown', 77950.80, 36, '2023-12-05', '2026-10-26 11:02:08'),
 ('hdavis', 'HDavis#321', 'Henry', 'Davis', 62300.40, 28, '2024-08-19', NULL),
 ('iwalker', 'Walker@99', 'Isabella', 'Walker', 85725.90, 45, '2022-05-30', '2026-10-26 08:48:27');
+
+1. INSERT INTO users (username, password, firstname, lastname, salary, age, registerday) VALUES (?, ?, ?, ?, ?, ?, ?);
+2. SELECT password FROM users WHERE username = ? LIMIT 1;, UPDATE users SET signintime = ? WHERE username = ?;
+3. SELECT * FROM users where firstname = ? OR lastname = ? or concat(firstname, ' ', lastname) = ?;
+4. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE username = ?;
+5. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE salary BETWEEN ? AND ?;
+6. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE age BETWEEN ? AND ?;
+7. SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE registerday > (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);
+8.SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE signintime IS NULL;
+9. SELECT username, firstname, lastname, registerday, signintime, age, salary FROM users WHERE registerday = (SELECT registerday FROM users WHERE username = 'john' LIMIT 1);
+10. SELECT username, firstname, lastname, age, salary, registerday, signintime FROM users WHERE DATE(registerday) = DATE(CURDATE());
